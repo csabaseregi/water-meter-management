@@ -111,6 +111,7 @@ const App = () => {
       active: meters.filter((m) => m.status === "active").length,
       stock: meters.filter((m) => m.status === "stock").length,
       maintenance: meters.filter((m) => m.status === "maintenance").length,
+      dismantled: meters.filter((m) => m.status === "dismantled").length,
       scrapped: meters.filter((m) => m.status === "scrapped").length,
     };
   };
@@ -381,6 +382,28 @@ const App = () => {
                   <span className="stat-label">db</span>
                 </div>
               </div>
+              <div
+                className={`stat-card ${filter === "dismantled" ? "active" : ""}`}
+                onClick={() => setFilter("dismantled")}
+              >
+                <div className="stat-icon">🔧</div>
+                <div className="stat-content">
+                  <h4>Leszerelt</h4>
+                  <div className="stat-number purple">{stats.dismantled}</div>
+                  <span className="stat-label">db</span>
+                </div>
+              </div>
+              <div
+                className={`stat-card ${filter === "scrapped" ? "active" : ""}`}
+                onClick={() => setFilter("scrapped")}
+              >
+                <div className="stat-icon">❌</div>
+                <div className="stat-content">
+                  <h4>Selejt</h4>
+                  <div className="stat-number red">{stats.scrapped}</div>
+                  <span className="stat-label">db</span>
+                </div>
+              </div>
             </div>
           </div>
 
@@ -434,7 +457,9 @@ const App = () => {
                                 ? "📦 Raktáron"
                                 : meter.status === "maintenance"
                                   ? "⚠️ Karbantartásban"
-                                  : "❌ Selejtezett"}
+                                  : meter.status === "dismantled"
+                                    ? "🔧 Leszerelt"
+                                    : "❌ Selejtezett"}
                           </span>
                           {meter.lastReading && (
                             <div className="last-reading">
@@ -1020,7 +1045,9 @@ const App = () => {
                             ? "📦 Raktáron"
                             : selectedMeter.status === "maintenance"
                               ? "⚠️ Karbantartásban"
-                              : "❌ Selejtezett"}
+                              : selectedMeter.status === "dismantled"
+                                ? "🔧 Leszerelt"
+                                : "❌ Selejtezett"}
                       </span>
                     </div>
                   </div>

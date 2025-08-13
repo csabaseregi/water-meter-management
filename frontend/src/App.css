@@ -307,8 +307,8 @@ body {
 
 .stats-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 1.5rem;
+  grid-template-columns: repeat(6, 1fr);
+  gap: 1rem;
 }
 
 .stat-card {
@@ -357,6 +357,7 @@ body {
 .stat-number.green { color: #28a745; }
 .stat-number.blue { color: #0066cc; }
 .stat-number.orange { color: #fd7e14; }
+.stat-number.purple { color: #6f42c1; }
 .stat-number.red { color: #dc3545; }
 
 .stat-label {
@@ -496,6 +497,12 @@ body {
   background-color: #fff3cd;
   color: #856404;
   border: 1px solid #ffeaa7;
+}
+
+.status-dismantled {
+  background-color: #e2e3f1;
+  color: #383d72;
+  border: 1px solid #b6b9e0;
 }
 
 .status-scrapped {
@@ -882,7 +889,7 @@ body {
   }
   
   .stats-grid {
-    grid-template-columns: repeat(2, 1fr);
+    grid-template-columns: repeat(3, 1fr);
   }
   
   .form-row {
@@ -906,7 +913,7 @@ body {
 
 @media (max-width: 480px) {
   .stats-grid {
-    grid-template-columns: 1fr;
+    grid-template-columns: repeat(2, 1fr);
   }
   
   .stat-card {
