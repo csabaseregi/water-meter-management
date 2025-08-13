@@ -1,4 +1,3 @@
-
 import React, { useState, useEffect } from 'react';
 import './App.css';
 
@@ -235,177 +234,280 @@ const App = () => {
 
   return (
     <div className="app">
-      {/* Header */}
-      <header className="header">
-        <div className="header-content">
-          <div className="header-title">
-            <h1>Vízóra Adatkezelő Rendszer</h1>
-            <span>MOHU Víziközmű Kft.</span>
+      {/* Top Banner */}
+      <div className="top-banner">
+        <div className="top-banner-content">
+          <div className="contact-info">
+            <span>📞 +36 1 234 5678</span>
+            <span>✉️ info@mohu-vizikozmu.hu</span>
           </div>
-          <div className="header-info">
-            <span className="test-badge">TEST KÖRNYEZET</span>
+          <div className="user-info">
             <span>Bejelentkezve: Admin</span>
-          </div>
-        </div>
-      </header>
-
-      {/* Main Content */}
-      <div className="container">
-        {/* Action Buttons */}
-        <div className="action-buttons">
-          <button 
-            className="btn btn-primary"
-            onClick={() => setShowProcurementModal(true)}
-          >
-            Új óra beszerzés
-          </button>
-          <button 
-            className="btn btn-success"
-            onClick={() => setShowInstallationModal(true)}
-          >
-            Telepítés
-          </button>
-          <button 
-            className="btn btn-info"
-            onClick={() => setShowReadingModal(true)}
-          >
-            Leolvasás
-          </button>
-          <button 
-            className="btn btn-warning"
-            onClick={() => setShowMaintenanceModal(true)}
-          >
-            Karbantartás
-          </button>
-        </div>
-
-        {/* Statistics */}
-        <div className="stats-section">
-          <h3>Óraállomány</h3>
-          <div className="stats-grid">
-            <div 
-              className={`stat-card ${filter === 'all' ? 'active' : ''}`}
-              onClick={() => setFilter('all')}
-            >
-              <h4>Összes óra</h4>
-              <div className="stat-number blue">{stats.total}</div>
-            </div>
-            <div 
-              className={`stat-card ${filter === 'active' ? 'active' : ''}`}
-              onClick={() => setFilter('active')}
-            >
-              <h4>Aktív</h4>
-              <div className="stat-number green">{stats.active}</div>
-            </div>
-            <div 
-              className={`stat-card ${filter === 'stock' ? 'active' : ''}`}
-              onClick={() => setFilter('stock')}
-            >
-              <h4>Raktáron</h4>
-              <div className="stat-number blue">{stats.stock}</div>
-            </div>
-            <div 
-              className={`stat-card ${filter === 'maintenance' ? 'active' : ''}`}
-              onClick={() => setFilter('maintenance')}
-            >
-              <h4>Karbantartásban</h4>
-              <div className="stat-number orange">{stats.maintenance}</div>
-            </div>
-            <div 
-              className={`stat-card ${filter === 'scrapped' ? 'active' : ''}`}
-              onClick={() => setFilter('scrapped')}
-            >
-              <h4>Selejtezett</h4>
-              <div className="stat-number red">{stats.scrapped}</div>
-            </div>
-          </div>
-        </div>
-
-        {/* Table */}
-        <div className="table-container">
-          <div className="table-header">
-            <h2>Vízórák {filter !== 'all' && <span className="filter-info">- {filter}</span>}</h2>
-          </div>
-          
-          <div className="table-wrapper">
-            <table className="data-table">
-              <thead>
-                <tr>
-                  <th>Óra azonosító</th>
-                  <th>Cím</th>
-                  <th>Státusz</th>
-                  <th>Aktuális állás</th>
-                  <th>Műveletek</th>
-                </tr>
-              </thead>
-              <tbody>
-                {filteredMeters.map((meter) => (
-                  <tr key={meter.id} className="table-row-clickable">
-                    <td>
-                      <div className="meter-info">
-                        <div className="meter-id">{meter.id}</div>
-                        <div className="meter-type">{meter.type} {meter.dn}</div>
-                        <div className="meter-serial">SN: {meter.serial}</div>
-                      </div>
-                    </td>
-                    <td>
-                      <div className="address-cell">
-                        {meter.address || '-'}
-                      </div>
-                    </td>
-                    <td>
-                      <div className="status-cell">
-                        <span className={`status-badge status-${meter.status}`}>
-                          {meter.status === 'active' ? 'Aktív' :
-                           meter.status === 'stock' ? 'Raktáron' :
-                           meter.status === 'maintenance' ? 'Karbantartásban' :
-                           'Selejtezett'}
-                        </span>
-                        {meter.lastReading && (
-                          <div className="last-reading">
-                            Utolsó leolvasás: {meter.lastReading}
-                          </div>
-                        )}
-                      </div>
-                    </td>
-                    <td>
-                      <div className="reading-cell">
-                        {meter.currentReading} m³
-                      </div>
-                    </td>
-                    <td>
-                      <div className="actions-cell">
-                        <button 
-                          className="action-link blue"
-                          onClick={() => {
-                            setSelectedMeter(meter);
-                            setShowDetails(true);
-                          }}
-                        >
-                          Részletek
-                        </button>
-                      </div>
-                    </td>
-                  </tr>
-                ))}
-              </tbody>
-            </table>
-            
-            {filteredMeters.length === 0 && (
-              <div className="empty-state">
-                Nincs megjeleníthető óra.
-              </div>
-            )}
+            <span className="test-badge">TEST KÖRNYEZET</span>
           </div>
         </div>
       </div>
+
+      {/* Header */}
+      <header className="header">
+        <div className="header-content">
+          <div className="logo-section">
+            <div className="logo">
+              <div className="logo-icon">🚰</div>
+              <div className="logo-text">
+                <h1>MOHU Víziközmű Kft.</h1>
+                <span>Vízóra Adatkezelő Rendszer</span>
+              </div>
+            </div>
+          </div>
+
+          <nav className="main-navigation">
+            <div className="nav-item active">
+              <span>🏠 Kezdőlap</span>
+            </div>
+            <div className="nav-item">
+              <span>📊 Kimutatások</span>
+            </div>
+            <div className="nav-item">
+              <span>⚙️ Beállítások</span>
+            </div>
+            <div className="nav-item">
+              <span>📞 Kapcsolat</span>
+            </div>
+          </nav>
+        </div>
+      </header>
+
+      {/* Breadcrumb */}
+      <div className="breadcrumb">
+        <div className="breadcrumb-content">
+          <span>Kezdőlap</span>
+          <span className="separator">></span>
+          <span>Vízóra kezelés</span>
+        </div>
+      </div>
+
+      {/* Main Content */}
+      <div className="main-container">
+        {/* Sidebar */}
+        <aside className="sidebar">
+          <div className="sidebar-section">
+            <h3>Ügyfélszolgálat</h3>
+            <div className="quick-links">
+              <div 
+                className="quick-link"
+                onClick={() => setShowProcurementModal(true)}
+              >
+                <span className="icon">📦</span>
+                <span>Új óra beszerzés</span>
+              </div>
+              <div 
+                className="quick-link"
+                onClick={() => setShowInstallationModal(true)}
+              >
+                <span className="icon">🔧</span>
+                <span>Telepítés</span>
+              </div>
+              <div 
+                className="quick-link"
+                onClick={() => setShowReadingModal(true)}
+              >
+                <span className="icon">📋</span>
+                <span>Leolvasás</span>
+              </div>
+              <div 
+                className="quick-link"
+                onClick={() => setShowMaintenanceModal(true)}
+              >
+                <span className="icon">⚠️</span>
+                <span>Karbantartás</span>
+              </div>
+            </div>
+          </div>
+
+          <div className="sidebar-section">
+            <h3>Információ</h3>
+            <div className="info-box">
+              <h4>Vízóra csere időszak</h4>
+              <p>A vízórák kötelező cseréje 6 évente esedékes. Kérjük, időben jelentkezzen!</p>
+            </div>
+          </div>
+        </aside>
+
+        {/* Content Area */}
+        <main className="content">
+          {/* Hero Section */}
+          <div className="hero-section">
+            <h2>Vízóra Adatkezelő Rendszer</h2>
+            <p>Professzionális vízóra nyilvántartási és kezelési rendszer a MOHU Víziközmű Kft. részére</p>
+          </div>
+
+          {/* Statistics */}
+          <div className="stats-section">
+            <h3>📊 Óraállomány áttekintés</h3>
+            <div className="stats-grid">
+              <div 
+                className={`stat-card ${filter === 'all' ? 'active' : ''}`}
+                onClick={() => setFilter('all')}
+              >
+                <div className="stat-icon">📊</div>
+                <div className="stat-content">
+                  <h4>Összes óra</h4>
+                  <div className="stat-number">{stats.total}</div>
+                  <span className="stat-label">db</span>
+                </div>
+              </div>
+              <div 
+                className={`stat-card ${filter === 'active' ? 'active' : ''}`}
+                onClick={() => setFilter('active')}
+              >
+                <div className="stat-icon">✅</div>
+                <div className="stat-content">
+                  <h4>Aktív órák</h4>
+                  <div className="stat-number green">{stats.active}</div>
+                  <span className="stat-label">db</span>
+                </div>
+              </div>
+              <div 
+                className={`stat-card ${filter === 'stock' ? 'active' : ''}`}
+                onClick={() => setFilter('stock')}
+              >
+                <div className="stat-icon">📦</div>
+                <div className="stat-content">
+                  <h4>Raktáron</h4>
+                  <div className="stat-number blue">{stats.stock}</div>
+                  <span className="stat-label">db</span>
+                </div>
+              </div>
+              <div 
+                className={`stat-card ${filter === 'maintenance' ? 'active' : ''}`}
+                onClick={() => setFilter('maintenance')}
+              >
+                <div className="stat-icon">⚠️</div>
+                <div className="stat-content">
+                  <h4>Karbantartásban</h4>
+                  <div className="stat-number orange">{stats.maintenance}</div>
+                  <span className="stat-label">db</span>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          {/* Table */}
+          <div className="table-container">
+            <div className="table-header">
+              <h2>🚰 Vízórák nyilvántartása {filter !== 'all' && <span className="filter-info">- {filter}</span>}</h2>
+            </div>
+
+            <div className="table-wrapper">
+              <table className="data-table">
+                <thead>
+                  <tr>
+                    <th>Óra azonosító</th>
+                    <th>Telepítési cím</th>
+                    <th>Státusz</th>
+                    <th>Aktuális állás</th>
+                    <th>Műveletek</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  {filteredMeters.map((meter) => (
+                    <tr key={meter.id} className="table-row">
+                      <td>
+                        <div className="meter-info">
+                          <div className="meter-id">{meter.id}</div>
+                          <div className="meter-type">{meter.type} {meter.dn}</div>
+                          <div className="meter-serial">SN: {meter.serial}</div>
+                        </div>
+                      </td>
+                      <td>
+                        <div className="address-cell">
+                          {meter.address || 'Nincs telepítve'}
+                        </div>
+                      </td>
+                      <td>
+                        <div className="status-cell">
+                          <span className={`status-badge status-${meter.status}`}>
+                            {meter.status === 'active' ? '✅ Aktív' :
+                             meter.status === 'stock' ? '📦 Raktáron' :
+                             meter.status === 'maintenance' ? '⚠️ Karbantartásban' :
+                             '❌ Selejtezett'}
+                          </span>
+                          {meter.lastReading && (
+                            <div className="last-reading">
+                              Utolsó: {meter.lastReading}
+                            </div>
+                          )}
+                        </div>
+                      </td>
+                      <td>
+                        <div className="reading-cell">
+                          <strong>{meter.currentReading}</strong> m³
+                        </div>
+                      </td>
+                      <td>
+                        <div className="actions-cell">
+                          <button 
+                            className="action-button details"
+                            onClick={() => {
+                              setSelectedMeter(meter);
+                              setShowDetails(true);
+                            }}
+                          >
+                            👁️ Részletek
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+
+              {filteredMeters.length === 0 && (
+                <div className="empty-state">
+                  <div className="empty-icon">📭</div>
+                  <h3>Nincs megjeleníthető vízóra</h3>
+                  <p>A kiválasztott szűrési feltételeknek megfelelő óra nem található.</p>
+                </div>
+              )}
+            </div>
+          </div>
+        </main>
+      </div>
+
+      {/* Footer */}
+      <footer className="footer">
+        <div className="footer-content">
+          <div className="footer-section">
+            <h4>MOHU Víziközmű Kft.</h4>
+            <p>1234 Budapest, Víziközmű utca 12.</p>
+            <p>📞 +36 1 234 5678</p>
+            <p>✉️ info@mohu-vizikozmu.hu</p>
+          </div>
+          <div className="footer-section">
+            <h4>Ügyfélfogadás</h4>
+            <p>Hétfő - Péntek: 8:00 - 16:00</p>
+            <p>Szombat: 8:00 - 12:00</p>
+            <p>Vasárnap: Zárva</p>
+          </div>
+          <div className="footer-section">
+            <h4>Hasznos linkek</h4>
+            <p><a href="#">ÁSZF</a></p>
+            <p><a href="#">Adatvédelem</a></p>
+            <p><a href="#">Kapcsolat</a></p>
+          </div>
+        </div>
+        <div className="footer-bottom">
+          <p>&copy; 2024 MOHU Víziközmű Kft. Minden jog fenntartva.</p>
+        </div>
+      </footer>
 
       {/* Procurement Modal */}
       {showProcurementModal && (
         <div className="modal-overlay">
           <div className="modal">
             <div className="modal-header">
-              <h3>Új óra beszerzés</h3>
+              <h3>📦 Új óra beszerzés</h3>
               <button 
                 className="modal-close-btn"
                 onClick={() => setShowProcurementModal(false)}
@@ -413,7 +515,7 @@ const App = () => {
                 ×
               </button>
             </div>
-            
+
             <form onSubmit={handleProcurement}>
               <div className="form-container">
                 <div className="form-section">
@@ -429,7 +531,7 @@ const App = () => {
                       required
                     />
                   </div>
-                  
+
                   <div className="form-row">
                     <div className="form-group">
                       <label className="form-label">DN méret *</label>
@@ -499,7 +601,7 @@ const App = () => {
                   Mégse
                 </button>
                 <button type="submit" className="btn btn-primary">
-                  Beszerzés rögzítése
+                  📦 Beszerzés rögzítése
                 </button>
               </div>
             </form>
@@ -512,7 +614,7 @@ const App = () => {
         <div className="modal-overlay">
           <div className="modal">
             <div className="modal-header">
-              <h3>Óra telepítés</h3>
+              <h3>🔧 Óra telepítés</h3>
               <button 
                 className="modal-close-btn"
                 onClick={() => setShowInstallationModal(false)}
@@ -520,12 +622,12 @@ const App = () => {
                 ×
               </button>
             </div>
-            
+
             <form onSubmit={handleInstallation}>
               <div className="form-container">
                 <div className="form-section">
                   <div className="form-section-title">Telepítési adatok</div>
-                  
+
                   <div className="form-group">
                     <label className="form-label">Óra kiválasztása *</label>
                     <select
@@ -586,7 +688,7 @@ const App = () => {
                   Mégse
                 </button>
                 <button type="submit" className="btn btn-success">
-                  Telepítés rögzítése
+                  🔧 Telepítés rögzítése
                 </button>
               </div>
             </form>
@@ -599,7 +701,7 @@ const App = () => {
         <div className="modal-overlay">
           <div className="modal">
             <div className="modal-header">
-              <h3>Óraállás leolvasás</h3>
+              <h3>📋 Óraállás leolvasás</h3>
               <button 
                 className="modal-close-btn"
                 onClick={() => setShowReadingModal(false)}
@@ -607,12 +709,12 @@ const App = () => {
                 ×
               </button>
             </div>
-            
+
             <form onSubmit={handleReading}>
               <div className="form-container">
                 <div className="form-section">
                   <div className="form-section-title">Leolvasási adatok</div>
-                  
+
                   <div className="form-group">
                     <label className="form-label">Óra kiválasztása *</label>
                     <select
@@ -662,7 +764,7 @@ const App = () => {
                   Mégse
                 </button>
                 <button type="submit" className="btn btn-info">
-                  Leolvasás rögzítése
+                  📋 Leolvasás rögzítése
                 </button>
               </div>
             </form>
@@ -675,7 +777,7 @@ const App = () => {
         <div className="modal-overlay">
           <div className="modal">
             <div className="modal-header">
-              <h3>Karbantartás</h3>
+              <h3>⚠️ Karbantartás</h3>
               <button 
                 className="modal-close-btn"
                 onClick={() => setShowMaintenanceModal(false)}
@@ -683,12 +785,12 @@ const App = () => {
                 ×
               </button>
             </div>
-            
+
             <form onSubmit={handleMaintenance}>
               <div className="form-container">
                 <div className="form-section">
                   <div className="form-section-title">Karbantartási adatok</div>
-                  
+
                   <div className="form-group">
                     <label className="form-label">Aktív óra kiválasztása *</label>
                     <select
@@ -752,7 +854,7 @@ const App = () => {
                   Mégse
                 </button>
                 <button type="submit" className="btn btn-warning">
-                  Karbantartás rögzítése
+                  ⚠️ Karbantartás rögzítése
                 </button>
               </div>
             </form>
@@ -765,7 +867,7 @@ const App = () => {
         <div className="modal-overlay">
           <div className="modal">
             <div className="modal-header">
-              <h3>Óra részletek - {selectedMeter.id}</h3>
+              <h3>🔍 Óra részletek - {selectedMeter.id}</h3>
               <button 
                 className="modal-close-btn"
                 onClick={() => setShowDetails(false)}
@@ -773,7 +875,7 @@ const App = () => {
                 ×
               </button>
             </div>
-            
+
             <div className="detail-container">
               <div className="detail-section">
                 <div className="detail-section-title">Alapadatok</div>
@@ -812,16 +914,16 @@ const App = () => {
                     <label>Státusz</label>
                     <div className="detail-value">
                       <span className={`status-badge status-${selectedMeter.status}`}>
-                        {selectedMeter.status === 'active' ? 'Aktív' :
-                         selectedMeter.status === 'stock' ? 'Raktáron' :
-                         selectedMeter.status === 'maintenance' ? 'Karbantartásban' :
-                         'Selejtezett'}
+                        {selectedMeter.status === 'active' ? '✅ Aktív' :
+                         selectedMeter.status === 'stock' ? '📦 Raktáron' :
+                         selectedMeter.status === 'maintenance' ? '⚠️ Karbantartásban' :
+                         '❌ Selejtezett'}
                       </span>
                     </div>
                   </div>
                   <div className="detail-item full-width">
                     <label>Telepítési cím</label>
-                    <div className="detail-value">{selectedMeter.address || '-'}</div>
+                    <div className="detail-value">{selectedMeter.address || 'Nincs telepítve'}</div>
                   </div>
                   <div className="detail-item">
                     <label>Beszerzés dátuma</label>
@@ -829,11 +931,11 @@ const App = () => {
                   </div>
                   <div className="detail-item">
                     <label>Telepítés dátuma</label>
-                    <div className="detail-value">{selectedMeter.installDate || '-'}</div>
+                    <div className="detail-value">{selectedMeter.installDate || 'Nincs telepítve'}</div>
                   </div>
                   <div className="detail-item">
                     <label>Plomba száma</label>
-                    <div className="detail-value">{selectedMeter.sealNumber || '-'}</div>
+                    <div className="detail-value">{selectedMeter.sealNumber || 'Nincs'}</div>
                   </div>
                 </div>
               </div>
@@ -847,7 +949,7 @@ const App = () => {
                   </div>
                   <div className="detail-item">
                     <label>Utolsó leolvasás</label>
-                    <div className="detail-value">{selectedMeter.lastReading || '-'}</div>
+                    <div className="detail-value">{selectedMeter.lastReading || 'Nincs'}</div>
                   </div>
                 </div>
               </div>
