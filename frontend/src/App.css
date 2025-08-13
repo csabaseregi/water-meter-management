@@ -117,6 +117,7 @@ body {
 .main-navigation {
   display: flex;
   gap: 2rem;
+  margin-left: auto;
 }
 
 .nav-item {
@@ -576,43 +577,10 @@ body {
   margin-top: 4rem;
 }
 
-.footer-content {
-  max-width: 1200px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 2rem;
-  padding: 3rem 1rem 2rem;
-}
-
-.footer-section h4 {
-  font-size: 1.1rem;
-  font-weight: 600;
-  margin-bottom: 1rem;
-  color: #ffffff;
-}
-
-.footer-section p {
-  font-size: 0.9rem;
-  margin-bottom: 0.5rem;
-  color: rgba(255,255,255,0.9);
-}
-
-.footer-section a {
-  color: rgba(255,255,255,0.9);
-  text-decoration: none;
-  transition: color 0.2s ease;
-}
-
-.footer-section a:hover {
-  color: #ffffff;
-}
-
 .footer-bottom {
   background-color: rgba(0,0,0,0.2);
   text-align: center;
   padding: 1rem;
-  border-top: 1px solid rgba(255,255,255,0.1);
 }
 
 .footer-bottom p {

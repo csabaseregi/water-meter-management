@@ -277,9 +277,6 @@ const App = () => {
             <div className="nav-item">
               <span>⚙️ Beállítások</span>
             </div>
-            <div className="nav-item">
-              <span>📞 Kapcsolat</span>
-            </div>
           </nav>
         </div>
       </header>
@@ -331,29 +328,11 @@ const App = () => {
             </div>
           </div>
 
-          <div className="sidebar-section">
-            <h3>Információ</h3>
-            <div className="info-box">
-              <h4>Vízóra csere időszak</h4>
-              <p>
-                A vízórák kötelező cseréje 6 évente esedékes. Kérjük, időben
-                jelentkezzen!
-              </p>
-            </div>
-          </div>
+          
         </aside>
 
         {/* Content Area */}
         <main className="content">
-          {/* Hero Section */}
-          <div className="hero-section">
-            <h2>Vízóra Adatkezelő Rendszer</h2>
-            <p>
-              Professzionális vízóra nyilvántartási és kezelési rendszer a MOHU
-              Víziközmű Kft. részére
-            </p>
-          </div>
-
           {/* Statistics */}
           <div className="stats-section">
             <h3>📊 Óraállomány áttekintés</h3>
@@ -504,32 +483,6 @@ const App = () => {
 
       {/* Footer */}
       <footer className="footer">
-        <div className="footer-content">
-          <div className="footer-section">
-            <h4>MOHU Víziközmű Kft.</h4>
-            <p>1234 Budapest, Víziközmű utca 12.</p>
-            <p>📞 +36 1 234 5678</p>
-            <p>✉️ info@mohu-vizikozmu.hu</p>
-          </div>
-          <div className="footer-section">
-            <h4>Ügyfélfogadás</h4>
-            <p>Hétfő - Péntek: 8:00 - 16:00</p>
-            <p>Szombat: 8:00 - 12:00</p>
-            <p>Vasárnap: Zárva</p>
-          </div>
-          <div className="footer-section">
-            <h4>Hasznos linkek</h4>
-            <p>
-              <a href="#">ÁSZF</a>
-            </p>
-            <p>
-              <a href="#">Adatvédelem</a>
-            </p>
-            <p>
-              <a href="#">Kapcsolat</a>
-            </p>
-          </div>
-        </div>
         <div className="footer-bottom">
           <p>&copy; 2024 MOHU Víziközmű Kft. Minden jog fenntartva.</p>
         </div>
