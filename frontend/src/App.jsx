@@ -33,7 +33,7 @@ const App = () => {
   const [readingForm, setReadingForm] = useState({
     meterId: '',
     value: '',
-    status: 'active'
+    readingDate: ''
   });
 
   const [maintenanceForm, setMaintenanceForm] = useState({
@@ -126,6 +126,11 @@ const App = () => {
     return meters.filter(meter => meter.status === 'active');
   };
 
+  // Get meters for reading (active and maintenance status)
+  const getReadingMeters = () => {
+    return meters.filter(meter => meter.status === 'active' || meter.status === 'maintenance');
+  };
+
   // Handle procurement
   const handleProcurement = (e) => {
     e.preventDefault();
@@ -191,15 +196,14 @@ const App = () => {
         ? {
             ...meter,
             currentReading: readingForm.value,
-            lastReading: new Date().toISOString().split('T')[0],
-            status: readingForm.status
+            lastReading: readingForm.readingDate
           }
         : meter
     ));
     setReadingForm({
       meterId: '',
       value: '',
-      status: 'active'
+      readingDate: ''
     });
     setShowReadingModal(false);
   };
@@ -618,9 +622,9 @@ const App = () => {
                       required
                     >
                       <option value="">Válasszon órát...</option>
-                      {getActiveMeters().map(meter => (
+                      {getReadingMeters().map(meter => (
                         <option key={meter.id} value={meter.id}>
-                          {meter.id} - {meter.address} (Jelenlegi: {meter.currentReading} m³)
+                          {meter.id} - {meter.address} (Jelenlegi: {meter.currentReading} m³) - {meter.status === 'active' ? 'Aktív' : 'Karbantartásban'}
                         </option>
                       ))}
                     </select>
@@ -640,16 +644,14 @@ const App = () => {
                       />
                     </div>
                     <div className="form-group">
-                      <label className="form-label">Óra státusza *</label>
-                      <select
+                      <label className="form-label">Leolvasás dátuma *</label>
+                      <input
+                        type="date"
                         className="form-input"
-                        value={readingForm.status}
-                        onChange={(e) => setReadingForm({...readingForm, status: e.target.value})}
+                        value={readingForm.readingDate}
+                        onChange={(e) => setReadingForm({...readingForm, readingDate: e.target.value})}
                         required
-                      >
-                        <option value="active">Aktív</option>
-                        <option value="maintenance">Karbantartás</option>
-                      </select>
+                      />
                     </div>
                   </div>
                 </div>
@@ -862,5 +864,7 @@ const App = () => {
     </div>
   );
 };
+
+export default App;
 
 export default App;
