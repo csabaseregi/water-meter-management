@@ -139,6 +139,13 @@ function App() {
           houseNumber: '',
           status: 'active' // Default status for installation
         });
+      } else if (modalType === 'reading') {
+        setFormData({
+          selectedMeterId: meter ? meter.id : '',
+          newReading: '',
+          readingDate: new Date().toISOString().split('T')[0], // Today's date
+          readingNote: ''
+        });
       } else {
         setFormData({});
       }
@@ -242,11 +249,89 @@ function App() {
     closeModal();
   };
 
+  const handleReadingSubmit = () => {
+    // Validate required fields
+    const requiredFields = ['selectedMeterId', 'newReading', 'readingDate'];
+    const missingFields = requiredFields.filter(field => !formData[field] || formData[field].toString().trim() === '');
+    
+    if (missingFields.length > 0) {
+      alert(`Kérjük töltse ki a következő kötelező mezőket: ${missingFields.join(', ')}`);
+      return;
+    }
+
+    // Find the selected meter
+    const selectedMeter = meters.find(meter => meter.id === formData.selectedMeterId);
+    if (!selectedMeter) {
+      alert('Kérjük válasszon ki egy eszközt!');
+      return;
+    }
+
+    // Validate reading value
+    const newReading = parseFloat(formData.newReading);
+    const currentReading = selectedMeter.currentReading ? parseFloat(selectedMeter.currentReading) : 0;
+
+    if (isNaN(newReading) || newReading < 0) {
+      alert('Kérjük adjon meg egy érvényes mérőállást!');
+      return;
+    }
+
+    if (newReading < currentReading) {
+      const confirmBackward = confirm(
+        `Az új mérőállás (${newReading} m³) kisebb, mint a jelenlegi állás (${currentReading} m³). ` +
+        `Ez visszafelé történő fogyasztást jelent. Biztosan folytatja?`
+      );
+      if (!confirmBackward) {
+        return;
+      }
+    }
+
+    // Calculate consumption
+    const consumption = newReading - currentReading;
+
+    // Check for unusually high consumption
+    if (consumption > 1000) {
+      const confirmHigh = confirm(
+        `Szokatlanul magas fogyasztás észlelhető: ${consumption.toFixed(3)} m³. ` +
+        `Biztosan helyes az érték?`
+      );
+      if (!confirmHigh) {
+        return;
+      }
+    }
+
+    // Update meter with new reading
+    setMeters(prev => prev.map(meter => 
+      meter.id === formData.selectedMeterId 
+        ? {
+            ...meter,
+            currentReading: newReading.toString(),
+            lastReading: formData.readingDate
+          }
+        : meter
+    ));
+    
+    // Show success message
+    alert(
+      `Leolvasás sikeresen rögzítve!\n` +
+      `Eszköz: #${selectedMeter.id} - ${selectedMeter.type} ${selectedMeter.dn}\n` +
+      `Cím: ${selectedMeter.address || 'Nincs telepítve'}\n` +
+      `Új mérőállás: ${newReading} m³\n` +
+      `Fogyasztás: ${consumption.toFixed(3)} m³\n` +
+      `Dátum: ${formData.readingDate}` +
+      (formData.readingNote ? `\nMegjegyzés: ${formData.readingNote}` : '')
+    );
+    
+    // Close modal
+    closeModal();
+  };
+
   const handleSubmit = () => {
     if (activeModal === 'procurement') {
       handleProcurementSubmit();
     } else if (activeModal === 'installation') {
       handleInstallationSubmit();
+    } else if (activeModal === 'reading') {
+      handleReadingSubmit();
     } else {
       // Handle other modal types
       alert('Form submitted successfully!');
@@ -885,11 +970,141 @@ function App() {
               </>
             )}
 
+            {/* Reading Modal */}
+            {activeModal === 'reading' && (
+              <>
+                <div className="modal-header">
+                  <h3>Leolvasás</h3>
+                  <button onClick={closeModal} className="modal-close-btn">×</button>
+                </div>
+                
+                <div className="form-container">
+                  {/* Device Selection */}
+                  <div className="form-section">
+                    <h4 className="form-section-title">1. Eszköz kiválasztása</h4>
+                    
+                    <div className="form-group">
+                      <label className="form-label">Leolvasható eszközök *</label>
+                      <select
+                        value={formData.selectedMeterId || ''}
+                        onChange={(e) => handleInputChange('selectedMeterId', e.target.value)}
+                        className="form-input"
+                      >
+                        <option value="">Válassz eszközt...</option>
+                        {meters
+                          .filter(meter => meter.status === 'active' || meter.status === 'maintenance')
+                          .map(meter => (
+                            <option key={meter.id} value={meter.id}>
+                              #{meter.id} - {meter.type} {meter.dn} - {meter.address || 'Cím nincs megadva'} - {meter.status === 'active' ? 'Aktív' : 'Karbantartás'}
+                            </option>
+                          ))
+                        }
+                      </select>
+                    </div>
+
+                    {/* Display selected device details */}
+                    {formData.selectedMeterId && (
+                      <div className="device-details">
+                        {(() => {
+                          const selectedDevice = meters.find(m => m.id === formData.selectedMeterId);
+                          return selectedDevice ? (
+                            <div className="device-info-card">
+                              <h5>Kiválasztott eszköz adatai:</h5>
+                              <p><strong>Azonosító:</strong> #{selectedDevice.id}</p>
+                              <p><strong>Típus:</strong> {selectedDevice.type} {selectedDevice.dn}</p>
+                              <p><strong>Sorozatszám:</strong> {selectedDevice.serial}</p>
+                              <p><strong>Cím:</strong> {selectedDevice.address || 'Nincs telepítve'}</p>
+                              <p><strong>Jelenlegi állás:</strong> {selectedDevice.currentReading ? `${selectedDevice.currentReading} m³` : 'Nincs korábbi leolvasás'}</p>
+                              <p><strong>Utolsó leolvasás:</strong> {selectedDevice.lastReading || 'Nincs korábbi leolvasás'}</p>
+                            </div>
+                          ) : null;
+                        })()}
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Reading Section */}
+                  <div className="form-section">
+                    <h4 className="form-section-title">2. Leolvasási adatok</h4>
+                    
+                    <div className="form-group">
+                      <label className="form-label">Új mérőállás (m³) *</label>
+                      <input
+                        type="number"
+                        step="0.001"
+                        min="0"
+                        placeholder="pl. 1250.345"
+                        value={formData.newReading || ''}
+                        onChange={(e) => handleInputChange('newReading', e.target.value)}
+                        className="form-input"
+                      />
+                      <p className="form-note">
+                        Kérjük adja meg a vízmérő aktuális állását köbméterben. Három tizedesjegy pontossággal.
+                      </p>
+                    </div>
+
+                    <div className="form-group">
+                      <label className="form-label">Leolvasás dátuma *</label>
+                      <input
+                        type="date"
+                        value={formData.readingDate || new Date().toISOString().split('T')[0]}
+                        onChange={(e) => handleInputChange('readingDate', e.target.value)}
+                        className="form-input"
+                      />
+                    </div>
+
+                    <div className="form-group">
+                      <label className="form-label">Megjegyzés</label>
+                      <input
+                        type="text"
+                        placeholder="Opcionális megjegyzés a leolvasáshoz"
+                        value={formData.readingNote || ''}
+                        onChange={(e) => handleInputChange('readingNote', e.target.value)}
+                        className="form-input"
+                      />
+                    </div>
+
+                    {/* Validation and calculation display */}
+                    {formData.selectedMeterId && formData.newReading && (
+                      <div className="address-preview">
+                        {(() => {
+                          const selectedDevice = meters.find(m => m.id === formData.selectedMeterId);
+                          const currentReading = selectedDevice?.currentReading ? parseFloat(selectedDevice.currentReading) : 0;
+                          const newReading = parseFloat(formData.newReading);
+                          const consumption = newReading - currentReading;
+                          
+                          if (newReading < currentReading) {
+                            return (
+                              <div style={{ color: '#dc2626', backgroundColor: '#fef2f2', border: '1px solid #fecaca' }}>
+                                <strong>⚠️ Figyelem:</strong> Az új mérőállás ({newReading} m³) kisebb, mint a jelenlegi állás ({currentReading} m³). Kérjük ellenőrizze az értéket!
+                              </div>
+                            );
+                          }
+                          
+                          return (
+                            <div>
+                              <strong>Fogyasztás:</strong> {consumption.toFixed(3)} m³
+                              {consumption > 1000 && (
+                                <div style={{ marginTop: '0.5rem', color: '#ea580c' }}>
+                                  <strong>Figyelem:</strong> Szokatlanul magas fogyasztás!
+                                </div>
+                              )}
+                            </div>
+                          );
+                        })()}
+                      </div>
+                    )}
+                  </div>
+
+                  <p className="form-note">* Kötelező mezők</p>
+                </div>
+              </>
+            )}
+
             {/* Other Modals */}
-            {activeModal !== 'procurement' && activeModal !== 'installation' && activeModal !== 'meterDetail' && (
+            {activeModal !== 'procurement' && activeModal !== 'installation' && activeModal !== 'meterDetail' && activeModal !== 'reading' && (
               <>
                 <h3>
-                  {activeModal === 'reading' && 'Leolvasás'}
                   {activeModal === 'maintenance' && 'Karbantartás'}
                   {activeModal === 'editMeter' && 'Vízmérő szerkesztése'}
                   {activeModal === 'replaceMeter' && 'Óracsere'}
@@ -909,7 +1124,8 @@ function App() {
                 </button>
                 <button onClick={handleSubmit} className="btn btn-primary">
                   {activeModal === 'procurement' ? 'Rögzítés' : 
-                   activeModal === 'installation' ? 'Telepítés' : 'OK'}
+                   activeModal === 'installation' ? 'Telepítés' :
+                   activeModal === 'reading' ? 'Leolvasás rögzítése' : 'OK'}
                 </button>
               </div>
             )}
